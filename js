@@ -1,1157 +1,666 @@
-```javascript
-/* =========================================
-   K&R LOVE LETTERS
-========================================= */
-
-
-/* =========================================
-   ACCOUNT DATA
-========================================= */
-
-let accounts = JSON.parse(
-    localStorage.getItem("KR_accounts")
-) || {
-
-    Kat: {
-        password: "K071717",
-
-        dog: "Buddy",
-
-        anniversary: "July 17, 2026"
-    },
-
-    Rachelle: {
-        password: "R071717",
-
-        dog: "Buddy",
-
-        anniversary: "July 17, 2026"
-    }
-
-};
-
-
-/* =========================================
-   LETTER DATA
-========================================= */
-
-let letters = JSON.parse(
-    localStorage.getItem("KR_letters")
-) || [];
-
-
-/* =========================================
-   MEDIA DATA
-========================================= */
-
-let mediaFiles = JSON.parse(
-    localStorage.getItem("KR_media")
-) || [];
-
-
-let currentUser = null;
-
-let selectedPaper = "classic";
-
-let selectedLetterId = null;
-
-
-/* =========================================
-   PAGE ELEMENTS
-========================================= */
-
-const loginPage =
-    document.getElementById("loginPage");
-
-const forgotPage =
-    document.getElementById("forgotPage");
-
-const mainPage =
-    document.getElementById("mainPage");
-
-
-/* =========================================
-   LOGIN
-========================================= */
-
-document
-    .getElementById("loginForm")
-    .addEventListener("submit", function (event) {
-
-        event.preventDefault();
-
-        const username =
-            document
-                .getElementById("username")
-                .value
-                .trim();
-
-        const password =
-            document
-                .getElementById("password")
-                .value;
-
-        const message =
-            document.getElementById("loginMessage");
-
-
-        if (
-            accounts[username] &&
-            accounts[username].password === password
-        ) {
-
-            currentUser = username;
-
-            localStorage.setItem(
-                "KR_currentUser",
-                currentUser
-            );
-
-            loginPage.classList.remove("active");
-
-            mainPage.classList.add("active");
-
-            document.getElementById(
-                "currentUser"
-            ).textContent = currentUser;
-
-            updateEverything();
-
-        } else {
-
-            message.textContent =
-                "Incorrect account name or password.";
-
-        }
-
-    });
-
-
-/* =========================================
-   SHOW PASSWORD
-========================================= */
-
-document
-    .getElementById("showPassword")
-    .addEventListener("click", function () {
-
-        const password =
-            document.getElementById("password");
-
-        if (password.type === "password") {
-
-            password.type = "text";
-
-            this.textContent = "○";
-
-        } else {
-
-            password.type = "password";
-
-            this.textContent = "◉";
-        }
-
-    });
-
-
-/* =========================================
-   FORGOT PASSWORD
-========================================= */
-
-document
-    .getElementById("forgotButton")
-    .addEventListener("click", function () {
-
-        loginPage.classList.remove("active");
-
-        forgotPage.classList.add("active");
-
-    });
-
-
-document
-    .getElementById("backLogin")
-    .addEventListener("click", function () {
-
-        forgotPage.classList.remove("active");
-
-        loginPage.classList.add("active");
-
-    });
-
-
-document
-    .getElementById("resetPassword")
-    .addEventListener("click", function () {
-
-        const account =
-            document.getElementById(
-                "forgotAccount"
-            ).value;
-
-        const dog =
-            document.getElementById(
-                "dogAnswer"
-            ).value
-            .trim()
-            .toLowerCase();
-
-        const anniversary =
-            document.getElementById(
-                "anniversaryAnswer"
-            ).value
-            .trim()
-            .toLowerCase();
-
-        const newPassword =
-            document.getElementById(
-                "newPassword"
-            ).value;
-
-
-        const message =
-            document.getElementById(
-                "resetMessage"
-            );
-
-
-        if (!account || !dog || !anniversary || !newPassword) {
-
-            message.textContent =
-                "Please complete all fields.";
-
-            return;
-        }
-
-
-        if (
-            accounts[account].dog.toLowerCase() === dog &&
-            accounts[account].anniversary.toLowerCase() === anniversary
-        ) {
-
-            accounts[account].password =
-                newPassword;
-
-            localStorage.setItem(
-                "KR_accounts",
-                JSON.stringify(accounts)
-            );
-
-            message.style.color = "#36a269";
-
-            message.textContent =
-                "Password changed successfully.";
-
-        } else {
-
-            message.style.color = "#e33";
-
-            message.textContent =
-                "The answers do not match.";
-
-        }
-
-    });
-
-
-/* =========================================
-   LOGOUT
-========================================= */
-
-document
-    .getElementById("logoutButton")
-    .addEventListener("click", function () {
-
-        currentUser = null;
-
-        localStorage.removeItem(
-            "KR_currentUser"
-        );
-
-        mainPage.classList.remove("active");
-
-        loginPage.classList.add("active");
-
-        document.getElementById(
-            "password"
-        ).value = "";
-
-    });
-
-
-/* =========================================
-   NAVIGATION
-========================================= */
-
-document
-    .querySelectorAll(".folder")
-    .forEach(function (folder) {
-
-        folder.addEventListener("click", function () {
-
-            const section =
-                this.dataset.section;
-
-            showSection(section);
-
-        });
-
-    });
-
-
-document
-    .querySelectorAll(".back-home")
-    .forEach(function (button) {
-
-        button.addEventListener("click", function () {
-
-            showSection("home");
-
-        });
-
-    });
-
-
-function showSection(section) {
-
-    document
-        .querySelectorAll(".content-section")
-        .forEach(function (element) {
-
-            element.classList.remove("active");
-
-        });
-
-
-    if (section === "home") {
-
-        document
-            .getElementById("homeSection")
-            .classList.add("active");
-
-    }
-
-    if (section === "newLetters") {
-
-        document
-            .getElementById("newLettersSection")
-            .classList.add("active");
-
-        renderLetters();
-
-    }
-
-    if (section === "readLetters") {
-
-        document
-            .getElementById("readLettersSection")
-            .classList.add("active");
-
-        renderLetters();
-
-    }
-
-    if (section === "photos") {
-
-        document
-            .getElementById("photosSection")
-            .classList.add("active");
-
-        renderMedia();
-
-    }
-
-    if (section === "writeLetter") {
-
-        document
-            .getElementById("writeLetterSection")
-            .classList.add("active");
-
-    }
-
+```css
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --black: #080808;
+    --black2: #111111;
+    --red: #b51220;
+    --red2: #d7192a;
+    --white: #ffffff;
+    --gray: #888888;
+    --border: #292929;
+}
+
+body {
+    background: var(--black);
+    color: var(--white);
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.page {
+    display: none;
+    min-height: 100vh;
+}
+
+.page.active {
+    display: flex;
 }
 
 
-/* =========================================
-   PAPER DESIGNS
-========================================= */
+/* ================= LOGIN ================= */
 
-const paperDesigns = [
+#loginPage,
+#forgotPage {
+    align-items: center;
+    justify-content: center;
 
-    ["classic", "Classic Love"],
+    padding: 20px;
 
-    ["redvelvet", "Red Velvet"],
+    background:
+        radial-gradient(
+            circle at top,
+            #39070d,
+            #100203 40%,
+            #080808 75%
+        );
+}
 
-    ["midnight", "Midnight"],
+.login-box {
+    width: 100%;
+    max-width: 430px;
 
-    ["rose", "Rose"],
+    padding: 45px 38px;
 
-    ["coffee", "Coffee"],
+    background: #111;
 
-    ["superhero", "Superhero"],
+    border: 1px solid var(--border);
 
-    ["gothic", "Gothic"],
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.7);
+}
 
-    ["cherry", "Cherry Blossom"],
+.logo {
+    text-align: center;
 
-    ["starry", "Starry Night"],
+    font-size: 65px;
 
-    ["vintage", "Vintage"]
+    font-weight: bold;
 
-];
+    letter-spacing: -6px;
+}
 
+.logo span {
+    color: var(--red);
+}
 
-const paperChoices =
-    document.getElementById(
-        "paperChoices"
-    );
+.logo-subtitle {
+    text-align: center;
 
+    color: #888;
 
-paperDesigns.forEach(function (paper) {
+    font-size: 10px;
 
-    const button =
-        document.createElement("button");
+    letter-spacing: 5px;
 
-    button.className =
-        "paper-choice " + paper[0];
+    margin-top: 5px;
 
-    button.textContent =
-        paper[1];
+    margin-bottom: 40px;
+}
 
-    button.addEventListener(
-        "click",
-        function () {
+.small-logo {
+    text-align: center;
 
-            selectedPaper =
-                paper[0];
+    font-size: 38px;
 
-            document
-                .querySelectorAll(".paper-choice")
-                .forEach(function (item) {
+    font-weight: bold;
 
-                    item.classList.remove(
-                        "selected"
-                    );
+    margin-bottom: 25px;
+}
 
-                });
+.login-box h2 {
+    text-align: center;
 
-            button.classList.add(
-                "selected"
-            );
+    margin-bottom: 10px;
+}
 
-            document
-                .getElementById("paperPreview")
-                .className =
-                "paper " + selectedPaper;
+.description {
+    color: #888;
 
-        }
-    );
+    text-align: center;
 
-    paperChoices.appendChild(button);
+    font-size: 13px;
 
-});
+    line-height: 1.6;
 
+    margin-bottom: 25px;
+}
 
-document
-    .querySelector(".paper-choice")
-    .classList.add("selected");
+label {
+    display: block;
 
+    color: #ccc;
 
-/* =========================================
-   LETTER RECEIVER
-========================================= */
+    font-size: 12px;
 
-document
-    .getElementById("letterReceiver")
-    .addEventListener("change", function () {
+    margin-top: 18px;
 
-        updateSignature();
+    margin-bottom: 8px;
+}
 
-    });
+input,
+select,
+textarea {
+    width: 100%;
 
+    padding: 14px;
 
-function updateSignature() {
+    color: white;
 
-    document.getElementById(
-        "signatureName"
-    ).textContent = currentUser || "Kat";
+    background: #090909;
 
+    border: 1px solid #333;
+
+    outline: none;
+
+    transition: .2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--red);
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 50px;
+}
+
+#togglePassword {
+    position: absolute;
+
+    right: 8px;
+    top: 7px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #888;
+
+    padding: 8px;
+}
+
+.red-button {
+    width: 100%;
+
+    margin-top: 24px;
+
+    padding: 15px;
+
+    border: none;
+
+    background: var(--red);
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    transition: .2s;
+}
+
+.red-button:hover {
+    background: var(--red2);
+
+    transform: translateY(-2px);
+}
+
+.forgot,
+.back-button {
+    display: block;
+
+    margin: 18px auto 0;
+
+    background: transparent;
+
+    border: none;
+
+    color: #888;
+
+    font-size: 12px;
+}
+
+.forgot:hover,
+.back-button:hover {
+    color: white;
+}
+
+#loginMessage,
+#resetMessage {
+    text-align: center;
+
+    color: #e33;
+
+    font-size: 12px;
+
+    min-height: 20px;
+
+    margin-top: 15px;
 }
 
 
-/* =========================================
-   SEND LETTER
-========================================= */
+/* ================= HEADER ================= */
 
-document
-    .getElementById("sendLetter")
-    .addEventListener("click", function () {
+#mainPage {
+    flex-direction: column;
 
-        const receiver =
-            document.getElementById(
-                "letterReceiver"
-            ).value;
+    background: #080808;
+}
 
-        const title =
-            document.getElementById(
-                "letterTitle"
-            ).value
-            .trim();
+header {
+    height: 72px;
 
-        const body =
-            document.getElementById(
-                "letterBody"
-            ).value
-            .trim();
+    padding: 0 6%;
 
+    display: flex;
 
-        if (!title || !body) {
+    align-items: center;
 
-            alert(
-                "Please write a title and letter."
-            );
+    justify-content: space-between;
 
-            return;
-        }
+    border-bottom: 1px solid var(--border);
 
+    position: sticky;
 
-        const newLetter = {
+    top: 0;
 
-            id: Date.now(),
+    z-index: 20;
 
-            from: currentUser,
+    background: rgba(8,8,8,.97);
+}
 
-            to: receiver,
+.header-logo {
+    font-size: 25px;
 
-            title: title,
+    font-weight: bold;
+}
 
-            body: body,
+.header-logo span {
+    color: var(--red);
+}
 
-            paper: selectedPaper,
+.header-right {
+    display: flex;
 
-            date: new Date().toLocaleString(),
+    align-items: center;
 
-            read: false,
+    gap: 18px;
+}
 
-            replies: []
+.header-right span {
+    color: #888;
 
-        };
+    font-size: 12px;
+}
 
+.header-right button {
+    padding: 8px 12px;
 
-        letters.push(newLetter);
+    background: transparent;
 
+    color: #888;
 
-        localStorage.setItem(
-            "KR_letters",
-            JSON.stringify(letters)
-        );
+    border: 1px solid #333;
 
+    font-size: 9px;
+}
 
-        document.getElementById(
-            "letterTitle"
-        ).value = "";
+.header-right button:hover {
+    color: white;
 
-        document.getElementById(
-            "letterBody"
-        ).value = "";
-
-
-        alert(
-            "Your letter has been sent. ♥"
-        );
-
-
-        updateEverything();
-
-        showSection("home");
-
-    });
-
-
-/* =========================================
-   DISPLAY LETTERS
-========================================= */
-
-function renderLetters() {
-
-    const newList =
-        document.getElementById(
-            "newLettersList"
-        );
-
-    const readList =
-        document.getElementById(
-            "readLettersList"
-        );
-
-
-    newList.innerHTML = "";
-
-    readList.innerHTML = "";
-
-
-    const received =
-        letters.filter(function (letter) {
-
-            return letter.to === currentUser;
-
-        });
-
-
-    const allLetters =
-        letters.filter(function (letter) {
-
-            return (
-                letter.from === currentUser ||
-                letter.to === currentUser
-            );
-
-        });
-
-
-    if (received.length === 0) {
-
-        newList.innerHTML =
-            `<div class="empty-state">
-                No new letters yet.
-            </div>`;
-
-    } else {
-
-        received
-            .filter(letter => !letter.read)
-            .forEach(function (letter) {
-
-                newList.appendChild(
-                    createLetterCard(letter)
-                );
-
-            });
-
-    }
-
-
-    if (allLetters.length === 0) {
-
-        readList.innerHTML =
-            `<div class="empty-state">
-                No letters yet.
-            </div>`;
-
-    } else {
-
-        allLetters.forEach(function (letter) {
-
-            readList.appendChild(
-                createLetterCard(letter)
-            );
-
-        });
-
-    }
-
+    border-color: var(--red);
 }
 
 
-function createLetterCard(letter) {
+/* ================= MAIN ================= */
 
-    const card =
-        document.createElement("div");
+main {
+    width: 100%;
+}
 
-    card.className =
-        "letter-card";
+.section {
+    display: none;
 
-    card.innerHTML = `
+    width: 90%;
 
-        <p class="tiny-title">
-            ${letter.from} → ${letter.to}
-        </p>
+    max-width: 1100px;
 
-        <h3>
-            ${escapeHTML(letter.title)}
-        </h3>
+    margin: auto;
 
-        <p class="letter-date">
-            ${letter.date}
-        </p>
+    padding: 70px 0;
+}
 
-        <p>
-            ${escapeHTML(
-                letter.body.substring(0, 100)
-            )}${letter.body.length > 100 ? "..." : ""}
-        </p>
-    `;
+.section.active {
+    display: block;
+}
 
+.welcome {
+    margin-bottom: 50px;
+}
 
-    card.addEventListener(
-        "click",
-        function () {
+.welcome small,
+.section-title small {
+    color: var(--red);
 
-            openLetter(letter.id);
+    font-size: 10px;
 
-        }
-    );
+    font-weight: bold;
 
+    letter-spacing: 4px;
+}
 
-    return card;
+.welcome h1 {
+    font-size: clamp(55px, 10vw, 95px);
 
+    letter-spacing: -7px;
+
+    margin: 8px 0;
+}
+
+.welcome p {
+    color: #777;
+
+    font-size: 14px;
 }
 
 
-/* =========================================
-   OPEN LETTER
-========================================= */
+/* ================= FOLDERS ================= */
 
-function openLetter(id) {
+.folders {
+    display: grid;
 
-    const letter =
-        letters.find(function (item) {
+    grid-template-columns: repeat(2, 1fr);
 
-            return item.id === id;
+    gap: 18px;
+}
 
-        });
+.folder {
+    min-height: 190px;
 
+    padding: 28px;
 
-    if (!letter) return;
+    text-align: left;
 
+    color: white;
 
-    selectedLetterId = id;
+    background: #111;
 
+    border: 1px solid var(--border);
 
-    if (letter.to === currentUser) {
+    transition: .25s;
+}
 
-        letter.read = true;
+.folder:hover {
+    border-color: var(--red);
 
-        localStorage.setItem(
-            "KR_letters",
-            JSON.stringify(letters)
-        );
+    transform: translateY(-4px);
 
-    }
+    background: #151515;
+}
 
+.folder-icon {
+    color: var(--red);
 
-    document.getElementById(
-        "modalFrom"
-    ).textContent =
-        letter.from + " → " + letter.to;
+    font-size: 28px;
 
+    margin-bottom: 35px;
+}
 
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
-        letter.title;
+.folder h3 {
+    font-size: 17px;
 
+    margin-bottom: 7px;
+}
 
-    document.getElementById(
-        "modalDate"
-    ).textContent =
-        letter.date;
+.folder p {
+    color: #777;
 
-
-    document.getElementById(
-        "modalBody"
-    ).textContent =
-        letter.body;
-
-
-    document
-        .getElementById("letterModal")
-        .classList.add("active");
-
-
-    renderLetters();
-
+    font-size: 11px;
 }
 
 
-/* =========================================
-   CLOSE MODAL
-========================================= */
+/* ================= SECTION TITLE ================= */
 
-document
-    .getElementById("closeModal")
-    .addEventListener("click", function () {
+.section-title {
+    display: flex;
 
-        document
-            .getElementById("letterModal")
-            .classList.remove("active");
+    align-items: center;
 
-    });
+    gap: 18px;
 
+    margin-bottom: 40px;
+}
 
-/* =========================================
-   SEND REPLY
-========================================= */
+.section-title h2 {
+    margin-top: 7px;
 
-document
-    .getElementById("sendReply")
-    .addEventListener("click", function () {
+    font-size: 32px;
+}
 
-        const reply =
-            document.getElementById(
-                "replyText"
-            ).value.trim();
+.backHome {
+    width: 45px;
 
+    height: 45px;
 
-        if (!reply) {
+    background: #111;
 
-            alert(
-                "Please write a reply."
-            );
+    color: white;
 
-            return;
-        }
+    border: 1px solid #333;
+}
 
-
-        const letter =
-            letters.find(function (item) {
-
-                return item.id === selectedLetterId;
-
-            });
-
-
-        if (!letter) return;
-
-
-        letter.replies.push({
-
-            from: currentUser,
-
-            body: reply,
-
-            date: new Date().toLocaleString()
-
-        });
-
-
-        /*
-            For this prototype, replies are stored
-            inside the original letter.
-        */
-
-
-        letters.push({
-
-            id: Date.now(),
-
-            from: currentUser,
-
-            to: letter.from,
-
-            title: "Re: " + letter.title,
-
-            body: reply,
-
-            paper: letter.paper,
-
-            date: new Date().toLocaleString(),
-
-            read: false,
-
-            replies: []
-
-        });
-
-
-        localStorage.setItem(
-            "KR_letters",
-            JSON.stringify(letters)
-        );
-
-
-        document.getElementById(
-            "replyText"
-        ).value = "";
-
-
-        alert(
-            "Your reply has been sent. ♥"
-        );
-
-
-        document
-            .getElementById("letterModal")
-            .classList.remove("active");
-
-
-        updateEverything();
-
-    });
-
-
-/* =========================================
-   MEDIA UPLOAD
-========================================= */
-
-document
-    .getElementById("mediaUpload")
-    .addEventListener("change", function () {
-
-        const files =
-            Array.from(this.files);
-
-
-        let currentSize =
-            mediaFiles.reduce(
-                function (total, item) {
-
-                    return total + item.size;
-
-                },
-                0
-            );
-
-
-        const maxSize =
-            150 * 1024 * 1024;
-
-
-        files.forEach(function (file) {
-
-            if (
-                currentSize + file.size >
-                maxSize
-            ) {
-
-                alert(
-                    "The 150 MB storage limit would be exceeded."
-                );
-
-                return;
-
-            }
-
-
-            /*
-                Local browser preview.
-
-                Real cloud storage will be added
-                when Supabase is connected.
-            */
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload = function (event) {
-
-                mediaFiles.push({
-
-                    name: file.name,
-
-                    type: file.type,
-
-                    size: file.size,
-
-                    data: event.target.result
-
-                });
-
-
-                currentSize += file.size;
-
-
-                localStorage.setItem(
-                    "KR_media",
-                    JSON.stringify(mediaFiles)
-                );
-
-
-                renderMedia();
-
-            };
-
-
-            reader.readAsDataURL(file);
-
-        });
-
-
-        this.value = "";
-
-    });
-
-
-/* =========================================
-   DISPLAY MEDIA
-========================================= */
-
-function renderMedia() {
-
-    const gallery =
-        document.getElementById(
-            "mediaGallery"
-        );
-
-
-    gallery.innerHTML = "";
-
-
-    let totalSize = 0;
-
-
-    mediaFiles.forEach(function (file) {
-
-        totalSize += file.size;
-
-
-        const item =
-            document.createElement("div");
-
-        item.className =
-            "media-item";
-
-
-        if (
-            file.type.startsWith("video")
-        ) {
-
-            item.innerHTML = `
-
-                <video
-                    src="${file.data}"
-                    controls
-                ></video>
-
-            `;
-
-        } else {
-
-            item.innerHTML = `
-
-                <img
-                    src="${file.data}"
-                    alt="${escapeHTML(file.name)}"
-                >
-
-            `;
-
-        }
-
-
-        gallery.appendChild(item);
-
-    });
-
-
-    const maxSize =
-        150 * 1024 * 1024;
-
-
-    const percentage =
-        Math.min(
-            (totalSize / maxSize) * 100,
-            100
-        );
-
-
-    document.getElementById(
-        "storageProgress"
-    ).style.width =
-        percentage + "%";
-
-
-    document.getElementById(
-        "storageText"
-    ).textContent =
-        formatMB(totalSize) +
-        " MB / 150 MB";
-
+.backHome:hover {
+    border-color: var(--red);
 }
 
 
-/* =========================================
-   UPDATE EVERYTHING
-========================================= */
+/* ================= LETTER CARDS ================= */
 
-function updateEverything() {
+.letter-card {
+    padding: 25px;
 
-    renderLetters();
+    margin-bottom: 12px;
 
-    renderMedia();
+    background: #111;
 
-    updateSignature();
+    border: 1px solid var(--border);
 
+    cursor: pointer;
 
-    const newCount =
-        letters.filter(function (letter) {
+    transition: .2s;
+}
 
-            return (
-                letter.to === currentUser &&
-                !letter.read
-            );
+.letter-card:hover {
+    border-color: var(--red);
+}
 
-        }).length;
+.letter-card small {
+    color: var(--red);
 
+    font-size: 9px;
 
-    document.getElementById(
-        "newCount"
-    ).textContent =
-        newCount +
-        (
-            newCount === 1
-                ? " new letter"
-                : " new letters"
-        );
+    letter-spacing: 2px;
+}
 
+.letter-card h3 {
+    margin: 8px 0;
+}
+
+.letter-card p {
+    color: #777;
+
+    font-size: 12px;
+}
+
+.empty {
+    padding: 60px 20px;
+
+    text-align: center;
+
+    color: #666;
+
+    border: 1px dashed #292929;
 }
 
 
-/* =========================================
-   HELPER FUNCTIONS
-========================================= */
+/* ================= PAPER CHOICES ================= */
 
-function formatMB(bytes) {
+.paper-grid {
+    display: grid;
 
-    return (
-        bytes /
-        (1024 * 1024)
-    ).toFixed(2);
+    grid-template-columns:
+        repeat(5, 1fr);
 
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+.paper-choice {
+    height: 75px;
+
+    border: 1px solid #333;
+
+    cursor: pointer;
+
+    padding: 8px;
+
+    font-size: 9px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    color: #222;
+}
+
+.paper-choice.selected {
+    outline: 2px solid var(--red);
+
+    outline-offset: 2px;
 }
 
 
-function escapeHTML(text) {
+/* ================= LETTER PAPER ================= */
 
-    const div =
-        document.createElement("div");
+.letter-paper {
+    min-height: 560px;
 
-    div.textContent = text;
+    margin-top: 30px;
 
-    return div.innerHTML;
+    padding: 55px;
 
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.4);
+
+    transition: .3s;
+}
+
+.letter-paper input,
+.letter-paper textarea {
+    background: transparent;
+
+    color: inherit;
+
+    border: none;
+}
+
+.letter-paper input {
+    font-size: 28px;
+
+    font-weight: bold;
+
+    padding: 0;
+}
+
+.letter-paper textarea {
+    min-height: 330px;
+
+    resize: vertical;
+
+    padding: 20px 0;
+
+    line-height: 1.8;
+}
+
+.paper-divider {
+    height: 1px;
+
+    background: currentColor;
+
+    opacity: .2;
+
+    margin: 18px 0;
+}
+
+.signature {
+    text-align: right;
+
+    font-size: 13px;
+}
+
+.signature strong {
+    display: block;
+
+    margin-top: 5px;
 }
 
 
-/* =========================================
-   RESTORE LOGIN SESSION
-========================================= */
+/* ================= 50 PAPER DESIGNS ================= */
 
-const savedUser =
-    localStorage.getItem(
-        "KR_currentUser"
-    );
-
-
-if (
-    savedUser &&
-    accounts[savedUser]
-) {
-
-    currentUser = savedUser;
-
-    loginPage.classList.remove("active");
-
-    mainPage.classList.add("active");
-
-    document.getElementById(
-        "currentUser"
-    ).textContent =
-        currentUser;
-
-    updateEverything();
-
+/* 1 */
+.paper-1 {
+    background: white;
+    color: #222;
 }
+
+/* 2 */
+.paper-2 {
+    background: #111;
+    color: white;
+}
+
+/* 3 */
+.paper-3 {
+    background: #8b101b;
+    color: white;
+}
+
+/* 4 */
+.paper-4 {
+    background: #f5e5e8;
+    color: #641d2b;
+}
+
+/* 5 */
+.paper-5 {
+    background: #eee;
+    color: #222;
+}
+
+/* 6 */
+.paper-6 {
+    background: #ead8bd;
+    color: #432b1b;
+}
+
+/* 7 */
+.paper-7 {
+    background: #e7d4ba;
+    color: #352
 ```
-
