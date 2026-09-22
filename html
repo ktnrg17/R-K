@@ -1,1 +1,529 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>K&R</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         LOGIN
+    ========================== -->
+    <section id="loginPage" class="page active">
+
+        <div class="login-card">
+
+            <div class="brand">
+                <span>K</span><b>&</b><span>R</span>
+            </div>
+
+            <p class="subtitle">LOVE LETTERS</p>
+
+            <form id="loginForm">
+
+                <label>Account Name</label>
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter account name"
+                    required
+                >
+
+                <label>Password</label>
+
+                <div class="password-box">
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        id="showPassword"
+                        class="eye-btn"
+                    >
+                        ◉
+                    </button>
+                </div>
+
+                <button type="submit" class="main-btn">
+                    LOGIN
+                </button>
+
+                <button
+                    type="button"
+                    id="forgotButton"
+                    class="forgot-btn"
+                >
+                    Forgot Password?
+                </button>
+
+                <p id="loginMessage" class="message"></p>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FORGOT PASSWORD
+    ========================== -->
+    <section id="forgotPage" class="page">
+
+        <div class="login-card">
+
+            <button class="back-btn" id="backLogin">
+                ← Back
+            </button>
+
+            <div class="brand small-brand">
+                K&R
+            </div>
+
+            <h2>Reset Password</h2>
+
+            <p class="small-text">
+                Answer the questions to create a new password.
+            </p>
+
+            <label>Account Name</label>
+
+            <select id="forgotAccount">
+                <option value="">Choose account</option>
+                <option value="Kat">Kat</option>
+                <option value="Rachelle">Rachelle</option>
+            </select>
+
+            <label>What is the name of your dog?</label>
+
+            <input
+                type="text"
+                id="dogAnswer"
+                placeholder="Your answer"
+            >
+
+            <label>When is your anniversary?</label>
+
+            <input
+                type="text"
+                id="anniversaryAnswer"
+                placeholder="Example: July 17, 2026"
+            >
+
+            <label>New Password</label>
+
+            <input
+                type="password"
+                id="newPassword"
+                placeholder="Create new password"
+            >
+
+            <button
+                type="button"
+                class="main-btn"
+                id="resetPassword"
+            >
+                CHANGE PASSWORD
+            </button>
+
+            <p id="resetMessage" class="message"></p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         MAIN WEBSITE
+    ========================== -->
+    <section id="mainPage" class="page">
+
+        <header class="topbar">
+
+            <div class="logo">
+                K<span>&</span>R
+            </div>
+
+            <div class="user-area">
+                <span id="currentUser"></span>
+
+                <button id="logoutButton">
+                    LOG OUT
+                </button>
+            </div>
+
+        </header>
+
+
+        <main>
+
+            <!-- HOME -->
+
+            <section id="homeSection" class="content-section active">
+
+                <div class="welcome">
+
+                    <p class="tiny-title">
+                        WELCOME BACK
+                    </p>
+
+                    <h1>K&R</h1>
+
+                    <p>
+                        A private place for your letters and memories.
+                    </p>
+
+                </div>
+
+
+                <div class="folder-grid">
+
+                    <button class="folder" data-section="newLetters">
+
+                        <div class="folder-icon">
+                            ♥
+                        </div>
+
+                        <h3>New Letters</h3>
+
+                        <span id="newCount">
+                            0 new letters
+                        </span>
+
+                    </button>
+
+
+                    <button class="folder" data-section="readLetters">
+
+                        <div class="folder-icon">
+                            ♡
+                        </div>
+
+                        <h3>Read Letters</h3>
+
+                        <span>
+                            Open your letters
+                        </span>
+
+                    </button>
+
+
+                    <button class="folder" data-section="photos">
+
+                        <div class="folder-icon">
+                            ▣
+                        </div>
+
+                        <h3>Photos</h3>
+
+                        <span>
+                            Photos & videos
+                        </span>
+
+                    </button>
+
+
+                    <button class="folder" data-section="writeLetter">
+
+                        <div class="folder-icon">
+                            ✎
+                        </div>
+
+                        <h3>Write a Letter</h3>
+
+                        <span>
+                            Write something special
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- NEW LETTERS -->
+
+            <section
+                id="newLettersSection"
+                class="content-section"
+            >
+
+                <div class="section-header">
+
+                    <button class="back-home">
+                        ←
+                    </button>
+
+                    <div>
+                        <p class="tiny-title">YOUR MAIL</p>
+                        <h2>New Letters</h2>
+                    </div>
+
+                </div>
+
+                <div id="newLettersList" class="letter-list">
+
+                    <div class="empty-state">
+                        No new letters yet.
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- READ LETTERS -->
+
+            <section
+                id="readLettersSection"
+                class="content-section"
+            >
+
+                <div class="section-header">
+
+                    <button class="back-home">
+                        ←
+                    </button>
+
+                    <div>
+                        <p class="tiny-title">MEMORIES IN WORDS</p>
+                        <h2>Read Letters</h2>
+                    </div>
+
+                </div>
+
+                <div id="readLettersList" class="letter-list">
+
+                    <div class="empty-state">
+                        No letters yet.
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- PHOTOS -->
+
+            <section
+                id="photosSection"
+                class="content-section"
+            >
+
+                <div class="section-header">
+
+                    <button class="back-home">
+                        ←
+                    </button>
+
+                    <div>
+                        <p class="tiny-title">YOUR MEMORIES</p>
+                        <h2>Photos</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="upload-area">
+
+                    <input
+                        type="file"
+                        id="mediaUpload"
+                        accept="image/*,video/*"
+                        multiple
+                        hidden
+                    >
+
+                    <label
+                        for="mediaUpload"
+                        class="upload-button"
+                    >
+                        + ADD PHOTO OR VIDEO
+                    </label>
+
+                    <p>
+                        Maximum total storage: 150 MB
+                    </p>
+
+                    <div class="storage-bar">
+
+                        <div
+                            id="storageProgress"
+                            class="storage-progress"
+                        ></div>
+
+                    </div>
+
+                    <span id="storageText">
+                        0 MB / 150 MB
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="mediaGallery"
+                    class="media-gallery"
+                ></div>
+
+            </section>
+
+
+            <!-- WRITE LETTER -->
+
+            <section
+                id="writeLetterSection"
+                class="content-section"
+            >
+
+                <div class="section-header">
+
+                    <button class="back-home">
+                        ←
+                    </button>
+
+                    <div>
+                        <p class="tiny-title">FROM THE HEART</p>
+                        <h2>Write a Letter</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="letter-editor">
+
+                    <div class="letter-controls">
+
+                        <label>To</label>
+
+                        <select id="letterReceiver">
+                            <option value="Rachelle">
+                                Rachelle
+                            </option>
+
+                            <option value="Kat">
+                                Kat
+                            </option>
+                        </select>
+
+
+                        <label>Paper Design</label>
+
+                        <div
+                            id="paperChoices"
+                            class="paper-choices"
+                        ></div>
+
+                    </div>
+
+
+                    <div
+                        id="paperPreview"
+                        class="paper classic"
+                    >
+
+                        <input
+                            id="letterTitle"
+                            type="text"
+                            placeholder="Letter title..."
+                        >
+
+                        <div class="paper-line"></div>
+
+                        <textarea
+                            id="letterBody"
+                            placeholder="Write your letter here..."
+                        ></textarea>
+
+                        <div class="paper-signature">
+                            With love,<br>
+                            <span id="signatureName">
+                                Kat
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        id="sendLetter"
+                        class="main-btn send-btn"
+                    >
+                        SEND LETTER
+                    </button>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </section>
+
+
+    <!-- =========================
+         LETTER MODAL
+    ========================== -->
+
+    <div id="letterModal" class="modal">
+
+        <div class="modal-content">
+
+            <button
+                id="closeModal"
+                class="close-modal"
+            >
+                ×
+            </button>
+
+            <p id="modalFrom" class="tiny-title"></p>
+
+            <h2 id="modalTitle"></h2>
+
+            <p id="modalDate" class="letter-date"></p>
+
+            <div
+                id="modalBody"
+                class="modal-letter-body"
+            ></div>
+
+
+            <div class="reply-area">
+
+                <h3>Reply to this letter</h3>
+
+                <textarea
+                    id="replyText"
+                    placeholder="Write your reply..."
+                ></textarea>
+
+                <button
+                    id="sendReply"
+                    class="main-btn"
+                >
+                    SEND REPLY
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+```
