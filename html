@@ -1,436 +1,135 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K&R</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090909">
+  <title>For You, Always ❤️</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,500&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<!-- ================= LOGIN ================= -->
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
 
-<div id="loginPage" class="page active">
+  <header class="navbar">
+    <a href="#home" class="logo"><span>♥</span> OUR LITTLE UNIVERSE</a>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#letters">Letters</a>
+      <a href="#memories">Memories</a>
+    </nav>
+    <a href="#letters" class="nav-heart" aria-label="Love letters">♥</a>
+  </header>
 
-    <div class="login-box">
-
-        <div class="logo">K<span>&</span>R</div>
-        <div class="logo-subtitle">LOVE LETTERS</div>
-
-        <form id="loginForm">
-
-            <label>Account Name</label>
-            <input
-                type="text"
-                id="username"
-                placeholder="Enter account name"
-                required
-            >
-
-            <label>Password</label>
-
-            <div class="password-wrapper">
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter password"
-                    required
-                >
-
-                <button type="button" id="togglePassword">
-                    ◉
-                </button>
-            </div>
-
-            <button class="red-button" type="submit">
-                LOGIN
-            </button>
-
-            <button
-                type="button"
-                class="forgot"
-                id="forgotButton"
-            >
-                Forgot Password?
-            </button>
-
-            <p id="loginMessage"></p>
-
-        </form>
-
-    </div>
-
-</div>
-
-
-<!-- ================= FORGOT PASSWORD ================= -->
-
-<div id="forgotPage" class="page">
-
-    <div class="login-box">
-
-        <button class="back-button" id="backLogin">
-            ← Back
-        </button>
-
-        <div class="small-logo">K&R</div>
-
-        <h2>Reset Password</h2>
-
-        <p class="description">
-            Answer both questions to create a new password.
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-content reveal">
+        <p class="eyebrow">A LITTLE PLACE MADE FOR YOU</p>
+        <h1>For You,<br><em>Always.</em></h1>
+        <p class="hero-description">
+          For every day you miss me, every moment you need a smile,
+          and every time you need a reminder of how loved you are.
         </p>
+        <a href="#letters" class="button">Enter our little world <span>→</span></a>
+        <p class="signature">Made with love, just for you. ♥</p>
+      </div>
+      <div class="hero-glow"></div>
+    </section>
 
-        <label>Account</label>
+    <section id="letters" class="section reveal">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">WORDS FROM MY HEART</p>
+          <h2>Love Letters<span>.</span></h2>
+          <p class="muted">Little pieces of my heart, saved just for you.</p>
+        </div>
+        <span class="counter" id="letter-count">03 LETTERS</span>
+      </div>
 
-        <select id="forgotAccount">
-            <option value="">Choose account</option>
-            <option value="Kat">Kat</option>
-            <option value="Rachelle">Rachelle</option>
-        </select>
-
-        <label>What is the name of your dog?</label>
-
-        <input
-            type="text"
-            id="dogAnswer"
-            placeholder="Your answer"
-        >
-
-        <label>When is your anniversary?</label>
-
-        <input
-            type="text"
-            id="anniversaryAnswer"
-            placeholder="Example: July 17, 2026"
-        >
-
-        <label>New Password</label>
-
-        <input
-            type="password"
-            id="newPassword"
-            placeholder="New password"
-        >
-
-        <button
-            class="red-button"
-            id="changePassword"
-        >
-            CHANGE PASSWORD
+      <div class="letter-grid">
+        <button class="letter-card" data-letter="first">
+          <span class="card-icon">✉</span>
+          <span class="card-number">01 / ALWAYS</span>
+          <span class="card-title">A Letter for My Girl</span>
+          <span class="card-description">For the person who makes ordinary days special.</span>
+          <span class="card-footer">OPEN LETTER <span>↗</span></span>
         </button>
 
-        <p id="resetMessage"></p>
-
-    </div>
-
-</div>
-
-
-<!-- ================= MAIN WEBSITE ================= -->
-
-<div id="mainPage" class="page">
-
-    <header>
-
-        <div class="header-logo">
-            K<span>&</span>R
-        </div>
-
-        <div class="header-right">
-
-            <span id="userName"></span>
-
-            <button id="logoutButton">
-                LOG OUT
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <main>
-
-        <!-- HOME -->
-
-        <section id="home" class="section active">
-
-            <div class="welcome">
-
-                <small>WELCOME BACK</small>
-
-                <h1>K&R</h1>
-
-                <p>
-                    Your private place for letters and memories.
-                </p>
-
-            </div>
-
-
-            <div class="folders">
-
-                <button
-                    class="folder"
-                    data-section="newLetters"
-                >
-
-                    <div class="folder-icon">♥</div>
-
-                    <h3>New Letters</h3>
-
-                    <p id="newLetterCount">
-                        0 new letters
-                    </p>
-
-                </button>
-
-
-                <button
-                    class="folder"
-                    data-section="readLetters"
-                >
-
-                    <div class="folder-icon">♡</div>
-
-                    <h3>Read Letters</h3>
-
-                    <p>
-                        Open your letters
-                    </p>
-
-                </button>
-
-
-                <button
-                    class="folder"
-                    data-section="photos"
-                >
-
-                    <div class="folder-icon">▣</div>
-
-                    <h3>Photos</h3>
-
-                    <p>
-                        Photos & videos
-                    </p>
-
-                </button>
-
-
-                <button
-                    class="folder"
-                    data-section="writeLetter"
-                >
-
-                    <div class="folder-icon">✎</div>
-
-                    <h3>Write a Letter</h3>
-
-                    <p>
-                        Write something special
-                    </p>
-
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- NEW LETTERS -->
-
-        <section id="newLetters" class="section">
-
-            <div class="section-title">
-
-                <button class="backHome">←</button>
-
-                <div>
-                    <small>YOUR MAIL</small>
-                    <h2>New Letters</h2>
-                </div>
-
-            </div>
-
-            <div id="newLettersContainer"></div>
-
-        </section>
-
-
-        <!-- READ LETTERS -->
-
-        <section id="readLetters" class="section">
-
-            <div class="section-title">
-
-                <button class="backHome">←</button>
-
-                <div>
-                    <small>YOUR MEMORIES</small>
-                    <h2>Read Letters</h2>
-                </div>
-
-            </div>
-
-            <div id="readLettersContainer"></div>
-
-        </section>
-
-
-        <!-- PHOTOS -->
-
-        <section id="photos" class="section">
-
-            <div class="section-title">
-
-                <button class="backHome">←</button>
-
-                <div>
-                    <small>YOUR MEMORIES</small>
-                    <h2>Photos</h2>
-                </div>
-
-            </div>
-
-
-            <div class="upload-box">
-
-                <label for="mediaUpload">
-                    + ADD PHOTO OR VIDEO
-                </label>
-
-                <input
-                    type="file"
-                    id="mediaUpload"
-                    accept="image/*,video/*"
-                    multiple
-                    hidden
-                >
-
-                <p>
-                    Maximum storage: 150 MB
-                </p>
-
-                <div class="storage">
-                    <div id="storageBar"></div>
-                </div>
-
-                <span id="storageText">
-                    0 MB / 150 MB
-                </span>
-
-            </div>
-
-
-            <div id="gallery" class="gallery"></div>
-
-        </section>
-
-
-        <!-- WRITE LETTER -->
-
-        <section id="writeLetter" class="section">
-
-            <div class="section-title">
-
-                <button class="backHome">←</button>
-
-                <div>
-                    <small>FROM THE HEART</small>
-                    <h2>Write a Letter</h2>
-                </div>
-
-            </div>
-
-
-            <div class="letter-options">
-
-                <label>To</label>
-
-                <select id="receiver">
-
-                    <option value="Rachelle">
-                        Rachelle
-                    </option>
-
-                    <option value="Kat">
-                        Kat
-                    </option>
-
-                </select>
-
-
-                <label>Choose Your Paper</label>
-
-                <div
-                    id="paperChoices"
-                    class="paper-grid"
-                ></div>
-
-            </div>
-
-
-            <div
-                id="letterPaper"
-                class="letter-paper paper-1"
-            >
-
-                <input
-                    type="text"
-                    id="letterTitle"
-                    placeholder="Letter title..."
-                >
-
-                <div class="paper-divider"></div>
-
-                <textarea
-                    id="letterText"
-                    placeholder="Write your letter here..."
-                ></textarea>
-
-                <div class="signature">
-
-                    With love,
-
-                    <strong id="signature">
-                        Kat
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <button
-                class="red-button send-button"
-                id="sendLetter"
-            >
-                SEND LETTER
-            </button>
-
-        </section>
-
-    </main>
-
-</div>
-
-
-<!-- ================= LETTER POPUP ================= -->
-
-<div id="letterModal">
-
-    <div class="letter-modal-box">
-
-        <button
-            id="closeModal"
-            class="close-modal"
-        >
-            ×
+        <button class="letter-card" data-letter="miss">
+          <span class="card-icon">♡</span>
+          <span class="card-number">02 / WHENEVER</span>
+          <span class="card-title">When You Miss Me</span>
+          <span class="card-description">A little reminder that distance can't change my love.</span>
+          <span class="card-footer">OPEN LETTER <span>↗</span></span>
         </button>
 
-        <small id="modalFr
-```
+        <button class="letter-card" data-letter="thank">
+          <span class="card-icon">✧</span>
+          <span class="card-number">03 / GRATITUDE</span>
+          <span class="card-title">Thank You, Love</span>
+          <span class="card-description">For being you, and for being part of my life.</span>
+          <span class="card-footer">OPEN LETTER <span>↗</span></span>
+        </button>
+      </div>
+    </section>
+
+    <section id="memories" class="section reveal">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">LITTLE MOMENTS, FOREVER</p>
+          <h2>Our Memories<span>.</span></h2>
+          <p class="muted">Every place feels different when I'm there with you.</p>
+        </div>
+      </div>
+
+      <div class="memory-grid">
+        <div class="memory-card">
+          <div class="memory-placeholder">01</div>
+          <h3>Our favorite day</h3>
+          <p>Replace this with a memory you share.</p>
+        </div>
+        <div class="memory-card">
+          <div class="memory-placeholder">02</div>
+          <h3>A place with you</h3>
+          <p>A simple moment I wish I could relive.</p>
+        </div>
+        <div class="memory-card">
+          <div class="memory-placeholder">03</div>
+          <h3>More to come</h3>
+          <p>Our story is still being written.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing reveal">
+      <span class="closing-heart">♥</span>
+      <p class="eyebrow">IN EVERY VERSION OF TOMORROW</p>
+      <h2>I'd still choose <em>you.</em></h2>
+      <p class="muted">Today, tomorrow, and all the ordinary days in between.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>MADE WITH LOVE <span>♥</span> JUST FOR YOU</p>
+  </footer>
+
+  <!-- Letter reader -->
+  <div class="modal" id="letter-modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close></div>
+    <article class="letter-paper" role="dialog" aria-modal="true"
+      aria-labelledby="modal-title">
+      <button class="close-button" data-close aria-label="Close letter">×</button>
+      <p class="eyebrow">A MESSAGE FROM MY HEART</p>
+      <h2 id="modal-title">My love,</h2>
+      <div id="modal-body" class="letter-body"></div>
+      <p class="letter-signature">Forever yours, <span>♥</span></p>
+    </article>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
